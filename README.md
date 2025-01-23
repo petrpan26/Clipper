@@ -2,7 +2,7 @@
 
 A powerful and user-friendly clipboard manager browser extension that enhances your copy-paste workflow with advanced features and keyboard shortcuts.
 
-![Clipper UI Example](bg.png)
+![Clipper UI Example](test.gif)
 
 ## Features
 
@@ -67,3 +67,7 @@ This project is open source and available under the MIT License.
 ## Version
 
 Current version: 1.0
+
+## TODO
+
+- [ ] Add compatibility with Google Docs
