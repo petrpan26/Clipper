@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            background: rgba(32, 33, 36, 0.95);
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(8px);
+            color: #fff;
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            transform: translateY(-6px);
+        }
+
+        body.visible {
+            opacity: 1;
+            transform: none;
+        }
+
+        body.animate-enabled {
+            transition: all 0.12s cubic-bezier(0.2, 0, 0.1, 1);
+        }
+
+        .content-wrapper {
+            flex: 1;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            padding: 16px 16px 0 16px;
+        }
+
+        .title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #8ab4f8;
+            margin-bottom: 12px;
+            opacity: 0;
+            transform: translateY(-6px);
+        }
+
+        .animate-enabled .title {
+            transition: all 0.12s cubic-bezier(0.2, 0, 0.1, 1);
+            transition-delay: 0.03s;
+        }
+
+        body.visible .title {
+            opacity: 1;
+            transform: none;
+        }
+
+        .scroll-container {
+            flex: 1;
+            overflow-y: auto;
+            min-height: 0;
+            padding-right: 8px;
+            margin-right: -8px;
+        }
+
+        .clipboard-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .clipboard-item {
+            padding: 8px 12px;
+            margin: 4px 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateX(-6px);
+            transition: background 0.12s ease;
+        }
+
+        .animate-enabled .clipboard-item {
+            transition: all 0.12s ease;
+        }
+
+        body.visible .clipboard-item {
+            opacity: 1;
+            transform: none;
+        }
+
+        .animate-enabled .clipboard-item:nth-child(1) { transition-delay: 0.02s; }
+        .animate-enabled .clipboard-item:nth-child(2) { transition-delay: 0.04s; }
+        .animate-enabled .clipboard-item:nth-child(3) { transition-delay: 0.06s; }
+        .animate-enabled .clipboard-item:nth-child(4) { transition-delay: 0.08s; }
+        .animate-enabled .clipboard-item:nth-child(5) { transition-delay: 0.10s; }
+        .animate-enabled .clipboard-item:nth-child(6) { transition-delay: 0.12s; }
+        .animate-enabled .clipboard-item:nth-child(7) { transition-delay: 0.14s; }
+        .animate-enabled .clipboard-item:nth-child(8) { transition-delay: 0.16s; }
+        .animate-enabled .clipboard-item:nth-child(9) { transition-delay: 0.18s; }
+
+        .clipboard-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .clipboard-item:active {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(0.98);
+        }
+
+        .number-badge {
+            background: #8ab4f8;
+            color: #202124;
+            width: 20px;
+            height: 20px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 12px;
+            flex-shrink: 0;
+            transition: all 0.12s ease;
+        }
+
+        .clipboard-item:hover .number-badge {
+            transform: scale(1.05);
+            background: #adc8fa;
+        }
+
+        .item-text {
+            font-size: 13px;
+            line-height: 1.4;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex-grow: 1;
+        }
+
+        .shortcut-hint {
+            flex-shrink: 0;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            text-align: center;
+            padding: 12px;
+            background: rgba(32, 33, 36, 0.95);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            opacity: 0;
+            transform: translateY(6px);
+        }
+
+        .animate-enabled .shortcut-hint {
+            transition: all 0.12s cubic-bezier(0.2, 0, 0.1, 1);
+            transition-delay: 0.06s;
+        }
+
+        body.visible .shortcut-hint {
+            opacity: 1;
+            transform: none;
+        }
+
+        .shortcut-key {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin: 0 2px;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            transition: background 0.12s ease;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 32px 16px;
+            color: rgba(255, 255, 255, 0.6);
+            opacity: 0;
+            transform: translateY(6px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100px;
+            font-size: 14px;
+        }
+
+        .animate-enabled .empty-state {
+            transition: all 0.12s cubic-bezier(0.2, 0, 0.1, 1);
+            transition-delay: 0.03s;
+        }
+
+        body.visible .empty-state {
+            opacity: 1;
+            transform: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="content-wrapper">
+        <div class="title">Clipboard History</div>
+        <div class="scroll-container">
+            <ul class="clipboard-list" id="clipboardList">
+                <!-- Items will be inserted here -->
+            </ul>
+        </div>
+    </div>
+    <div class="shortcut-hint">
+        Press <span class="shortcut-key">⌘</span> + <span class="shortcut-key">⌥</span> + <span class="shortcut-key">number</span> to paste
+    </div>
+    <script src="overlay.js"></script>
+    <script>
+        document.body.classList.add('animate-enabled');
+    </script>
+</body>
+</html>

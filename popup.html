@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clipboard History</title>
+    <style>
+        body {
+            width: 350px;
+            min-height: 200px;
+            max-height: 600px;
+            margin: 0;
+            padding: 16px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background-color: white;
+        }
+
+        .header {
+            padding-bottom: 12px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .clipboard-list {
+            overflow-y: auto;
+            max-height: 500px;
+        }
+
+        .clipboard-item {
+            padding: 10px;
+            margin: 8px 0;
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .clipboard-item:hover {
+            background: #e9ecef;
+            border-color: #dee2e6;
+        }
+
+        .clipboard-item.copied {
+            background: #d4edda;
+            border-color: #c3e6cb;
+        }
+
+        .clipboard-text {
+            flex-grow: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-right: 10px;
+            font-size: 14px;
+            color: #495057;
+        }
+
+        .copy-icon {
+            min-width: 20px;
+            height: 20px;
+            opacity: 0.5;
+            transition: opacity 0.2s;
+        }
+
+        .clipboard-item:hover .copy-icon {
+            opacity: 1;
+        }
+
+        .empty-message {
+            text-align: center;
+            color: #6c757d;
+            padding: 20px;
+            font-size: 14px;
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Clipboard History</h1>
+        <div id="status" style="font-size: 12px; color: #666;">Loading...</div>
+    </div>
+    <div id="clipboardHistory" class="clipboard-list">
+        <!-- Initial loading state -->
+        <div class="empty-message">Loading clipboard history...</div>
+    </div>
+    <script src="popup.js"></script>
+</body>
+</html>
